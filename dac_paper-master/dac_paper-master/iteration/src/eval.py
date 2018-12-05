@@ -11,7 +11,7 @@ import sys
 def AcceleratorModel(net_list):
 
     if len(net_list) < 2:
-        print 'ERROR! input net structrue is wrong!'
+        print ('ERROR! input net structrue is wrong!')
         exit(0)
 
     model = Sequential()
@@ -33,7 +33,7 @@ def format_data(data):
     try:
         return data.reshape((data.shape[0], 1)) if len(data.shape) == 1 else data
     except AttributeError as e:
-        print 'ERROR! data is not a numpy object, format_data failed!'
+        print ('ERROR! data is not a numpy object, format_data failed!')
         exit(0)
         
 def load_data(app_name):
@@ -49,19 +49,19 @@ def main(benchmark, weights_file):
     A.load_weights(weights_file)
 
     Y2 = A.predict(X1)
-    print A.evaluate(X1, Y1);
+    print (A.evaluate(X1, Y1))
 
-    re = [error.relative_error(Y1[i], Y2[i]) for i in xrange(len(X1))]
+    re = [error.relative_error(Y1[i], Y2[i]) for i in range(len(X1))]
     count = [0] * 101
     for v in re:
         count[int(math.floor(v * 100))] += 1
     s = sum(count)
     count = [float(v) / s for v in count]
     for i in range(101):
-        print i, count[i]
+        print (i, count[i])
 
-    for i in xrange(len(X1)):
-        print Y1[i], Y2[i], error.relative_error(Y1[i], Y2[i])
+    for i in range(len(X1)):
+        print (Y1[i], Y2[i], error.relative_error(Y1[i], Y2[i]))
 
 
 
@@ -69,6 +69,6 @@ def main(benchmark, weights_file):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print 'usage: python eval.py [benchmark name] [weights file]'
+        print ('usage: python eval.py [benchmark name] [weights file]')
     else:
         main(sys.argv[1], sys.argv[2])

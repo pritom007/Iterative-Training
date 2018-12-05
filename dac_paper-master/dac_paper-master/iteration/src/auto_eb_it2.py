@@ -11,7 +11,7 @@ import sys
  
 def AcceleratorModel(net_list):
     if len(net_list) < 2:
-        print 'ERROR! input net structrue is wrong!'
+        print ('ERROR! input net structrue is wrong!')
         exit(0)
 
     model = Sequential()
@@ -31,7 +31,7 @@ def AcceleratorModel(net_list):
 
 def ClassiferModel(net_list):
     if len(net_list) < 2:
-        print 'ERROR! input net structrue is wrong!'
+        print ('ERROR! input net structrue is wrong!')
         exit(0)
 
     model = Sequential()
@@ -56,7 +56,7 @@ def format_data(data):
     try:
         return data.reshape((data.shape[0], 1)) if len(data.shape) == 1 else data
     except AttributeError as e:
-        print 'ERROR! data is not a numpy object, format_data failed!'
+        print ('ERROR! data is not a numpy object, format_data failed!')
         exit(0)
 
 
@@ -100,7 +100,7 @@ def choose_flag_old(type):
             return a and c
         return choose
     else:
-        print 'ERROR! wrong choose_type!'
+        print ('ERROR! wrong choose_type!')
         exit(0)
 
 
@@ -111,19 +111,19 @@ def gen_evaluate(X, Y, accept, eb_type):
         acc = A.predict(X)
         # classification by C and truly 
         cls_c = [1 if v[1] > v[0] else 0 for v in C.predict(X)]
-        cls_t = [accept(Y[i], acc[i]) for i in xrange(N)] # to bool
+        cls_t = [accept(Y[i], acc[i]) for i in range(N)] # to bool
         # relatvie error for all test data
         if eb_type == 1:
-            re = [error.relative_error(Y[i], acc[i]) for i in xrange(N)]
-            re_c = [error.relative_error(Y[i], acc[i]) for i in xrange(N) if cls_c[i]]
+            re = [error.relative_error(Y[i], acc[i]) for i in range(N)]
+            re_c = [error.relative_error(Y[i], acc[i]) for i in range(N) if cls_c[i]]
         else:
-            re = [error.absolute_error(Y[i], acc[i]) for i in xrange(N)]
-            re_c = [error.absolute_error(Y[i], acc[i]) for i in xrange(N) if cls_c[i]]
+            re = [error.absolute_error(Y[i], acc[i]) for i in range(N)]
+            re_c = [error.absolute_error(Y[i], acc[i]) for i in range(N) if cls_c[i]]
 
 
         # accuracy of C, recall of C
-        accuracy_of_C = sum([1.0 if cls_t[i] == cls_c[i] else 0 for i in xrange(N)]) / float(1e-10 + N)
-        recall_of_C = sum([1.0 if cls_t[i] and cls_c[i] else 0 for i in xrange(N)]) / float(1e-10 + sum([1 if v else 0 for v in cls_t]))
+        accuracy_of_C = sum([1.0 if cls_t[i] == cls_c[i] else 0 for i in range(N)]) / float(1e-10 + N)
+        recall_of_C = sum([1.0 if cls_t[i] and cls_c[i] else 0 for i in range(N)]) / float(1e-10 + sum([1 if v else 0 for v in cls_t]))
 
         # invocation of C, invocation truly
         invocation_of_C = float(sum([1 if v else 0 for v in cls_c])) / float(1e-10 + N)
@@ -159,7 +159,7 @@ def get_output_name(app_name, error_bound, choose_type, epochA, epochC, batch_si
 
 #train_iteration(A, C, X0, Y0, X1, Y1, iteration, error_bound, choose_type, epochA, epochC, batch_sizeA, batch_sizeC, net_A, net_C, get_name)
 def train_iteration(A, C, X0, Y0, X1, Y1, iteration, error_bound, choose_type, epochA, epochC, batch_sizeA, batch_sizeC, net_A, net_C, get_name, eb_overall, eb_type):
-    print 'start training'
+    print ('start training')
     eb_now = error_bound
     step_now = 0.1
     eb_iteration = 1
@@ -183,7 +183,7 @@ def train_iteration(A, C, X0, Y0, X1, Y1, iteration, error_bound, choose_type, e
         evaluate = gen_evaluate(X1, Y1, accept, eb_type)
         for index in range(iteration):
             if len(X_now) == 0:
-                print 'No training data, end!'
+                print ('No training data, end!')
                 break
             # train accelerator with the current data(X0, Y0)
             if index == 0:
@@ -195,9 +195,9 @@ def train_iteration(A, C, X0, Y0, X1, Y1, iteration, error_bound, choose_type, e
             acc = A.predict(X_origin)
 
             # generate the truly classification
-            cls_t = [accept(Y_origin[i], acc[i]) for i in xrange(len(X_origin))]
+            cls_t = [accept(Y_origin[i], acc[i]) for i in range(len(X_origin))]
 
-            print len([1 for i in cls_t if i])
+            print (len([1 for i in cls_t if i]))
 
             # train the Classifer with X_origin, cls_t
             Y_cls = np.array([1 if v else 0 for v in cls_t]).reshape((len(cls_t), 1))
@@ -209,12 +209,12 @@ def train_iteration(A, C, X0, Y0, X1, Y1, iteration, error_bound, choose_type, e
 
             # get the classifer result of origin data
             cls_c = [1 if v[1] > v[0] else 0 for v in C.predict(X_origin)]
-            print len([1 for i in cls_c if i])
+            print (len([1 for i in cls_c if i]))
 
             # generate the next X_now, Y_now
 
-            X_now = np.array([X_origin[i] for i in xrange(len(X_origin)) if choose(cls_t[i], cls_c[i])])
-            Y_now = np.array([Y_origin[i] for i in xrange(len(X_origin)) if choose(cls_t[i], cls_c[i])])
+            X_now = np.array([X_origin[i] for i in range(len(X_origin)) if choose(cls_t[i], cls_c[i])])
+            Y_now = np.array([Y_origin[i] for i in range(len(X_origin)) if choose(cls_t[i], cls_c[i])])
 
             # save weights
             A.save_weights('../weights/auto_eb_it_A/A_{}.weights'.format(get_name(eb_index*iteration+index)), overwrite=True)
@@ -224,7 +224,7 @@ def train_iteration(A, C, X0, Y0, X1, Y1, iteration, error_bound, choose_type, e
             item = {'iteration':eb_index*iteration+index}
             item.update(evaluate(A, C))
             item.update({'eb_now':eb_now})
-            print item
+            print (item)
             mre_now = item['mean_relative_error_overall']
             if len(results) == 0:
                 keys = item.keys()
@@ -258,7 +258,7 @@ def main(app_name, iteration, error_bound, choose_type, epochA, epochC, batch_si
 
     get_name = get_output_name(app_name, error_bound, choose_type, epochA, epochC, batch_sizeA, batch_sizeC, net_A, net_C, eb_overall)
 
-    print get_name(iteration)
+    print (get_name(iteration))
     
     train_iteration(A, C, X0, Y0, X1, Y1, iteration, error_bound, choose_type, epochA, epochC, batch_sizeA, batch_sizeC, net_A, net_C, get_name, eb_overall, eb_type)
 
@@ -266,13 +266,13 @@ if __name__ == "__main__":
     if len(sys.argv) == 13:
         net_A = [int(x) for x in sys.argv[9].split('_')[1:]]
         net_C = [int(x) for x in sys.argv[10].split('_')[1:]]
-        print net_A
-        print net_C
+        print (net_A)
+        print (net_C)
         main(sys.argv[1], int(sys.argv[2]), float(sys.argv[3]), int(sys.argv[4]), int(sys.argv[5]), int(sys.argv[6]), int(sys.argv[7]), int(sys.argv[8]), net_A, net_C, float(sys.argv[11]), int(sys.argv[12]))
     else:
-        print 'Usage: python train_origin.py [benchmark_name] [iteration] [error_bound] [choose_type] [epochA] [epochC] [batch_sizeA] [batch_sizeC] [net_A] [net_C] [eb_overall] [eb_type]'
-        print '#choose_type: 0|1|2|3|4, [0: A or C] | [1: onlyC] | [2: onlyA] | [3: A and C] | [4: true]'
-        print '#net_A|net_C: like a_6_8_8_1, c_6_8_2'
+        print ('Usage: python train_origin.py [benchmark_name] [iteration] [error_bound] [choose_type] [epochA] [epochC] [batch_sizeA] [batch_sizeC] [net_A] [net_C] [eb_overall] [eb_type]')
+        print ('#choose_type: 0|1|2|3|4, [0: A or C] | [1: onlyC] | [2: onlyA] | [3: A and C] | [4: true]')
+        print ('#net_A|net_C: like a_6_8_8_1, c_6_8_2')
         exit(0)
 
 

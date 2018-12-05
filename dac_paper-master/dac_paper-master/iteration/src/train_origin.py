@@ -10,7 +10,7 @@ import sys
 def AcceleratorModel(net_list):
 
     if len(net_list) < 2:
-        print 'ERROR! input net structrue is wrong!'
+        print ('ERROR! input net structrue is wrong!')
         exit(0)
 
     model = Sequential()
@@ -32,7 +32,7 @@ def format_data(data):
     try:
         return data.reshape((data.shape[0], 1)) if len(data.shape) == 1 else data
     except AttributeError as e:
-        print 'ERROR! data is not a numpy object, format_data failed!'
+        print ('ERROR! data is not a numpy object, format_data failed!')
         exit(0)
 
 
@@ -77,7 +77,7 @@ def keras_to_fann(A, fann_sample, fann_output):
         for layer in layers:
             layer_sizes.append(layer.get_weights()[0].shape[0] + 1)
         layer_sizes.append(layers[len(layers)-1].get_weights()[0].shape[1] + 1)
-        print layer_sizes
+        print (layer_sizes)
         f.write(' '.join([str(v) for v in layer_sizes]) + ' \n')
 
         #write 34th line. (unchanged)
@@ -126,8 +126,8 @@ def train_origin(A, X0, Y0, X1, Y1, epoch, batch_size, output_name):
     result_mre = result_sum / float(len(X1))
     result_re_list = [(100.0 * result_num[x] / float(len(X1))) for x in range(len(result_num))]
 
-    print result_mre
-    print result_re_list
+    print (result_mre)
+    print (result_re_list)
 
     f_results = open('../results/origin/{}.csv'.format(output_name), 'w')
     f_results.write('mre,{}\n'.format(result_mre))
@@ -203,7 +203,7 @@ def main(app_name, epoch, batch_size, net_list):
 
     output_name = get_output_name(app_name, epoch, batch_size, net_list)
 
-    print output_name
+    print (output_name)
     
     train_origin(A, X0, Y0, X1, Y1, epoch, batch_size, output_name)
 
@@ -291,7 +291,7 @@ if __name__ == "__main__":
             net_list.append(int(i))
         main(sys.argv[1], int(sys.argv[2]), int(sys.argv[3]), net_list)
     else:
-        print 'Usage: python train_origin.py [benchmark_name] [epoch] [batch_size] [net_struct]'
+        print ('Usage: python train_origin.py [benchmark_name] [epoch] [batch_size] [net_struct]')
         exit(0)
 
 

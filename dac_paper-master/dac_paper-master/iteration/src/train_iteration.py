@@ -11,7 +11,7 @@ import sys
  
 def AcceleratorModel(net_list):
     if len(net_list) < 2:
-        print 'ERROR! input net structrue is wrong!'
+        print ('ERROR! input net structrue is wrong!')
         exit(0)
 
     model = Sequential()
@@ -31,7 +31,7 @@ def AcceleratorModel(net_list):
 
 def ClassiferModel(net_list):
     if len(net_list) < 2:
-        print 'ERROR! input net structrue is wrong!'
+        print('ERROR! input net structrue is wrong!')
         exit(0)
 
     model = Sequential()
@@ -56,7 +56,7 @@ def format_data(data):
     try:
         return data.reshape((data.shape[0], 1)) if len(data.shape) == 1 else data
     except AttributeError as e:
-        print 'ERROR! data is not a numpy object, format_data failed!'
+        print('ERROR! data is not a numpy object, format_data failed!')
         exit(0)
 
 
@@ -100,7 +100,7 @@ def choose_flag_old(type):
             return a and c
         return choose
     else:
-        print 'ERROR! wrong choose_type!'
+        print ('ERROR! wrong choose_type!')
         exit(0)
 
 
@@ -151,7 +151,7 @@ def get_output_name(app_name, error_bound, choose_type, epochA, epochC, batch_si
 
 #train_iteration(A, C, X0, Y0, X1, Y1, iteration, error_bound, choose_type, epochA, epochC, batch_sizeA, batch_sizeC, net_A, net_C, get_name)
 def train_iteration(A, C, X0, Y0, X1, Y1, iteration, error_bound, choose_type, epochA, epochC, batch_sizeA, batch_sizeC, net_A, net_C, get_name):
-    print 'start training'
+    print ('start training')
     accept = gen_accept(error_bound)
     evaluate = gen_evaluate(X1, Y1, accept)
     choose = choose_flag(choose_type)
@@ -168,7 +168,7 @@ def train_iteration(A, C, X0, Y0, X1, Y1, iteration, error_bound, choose_type, e
 
     for index in range(iteration):
         if len(X_now) == 0:
-            print 'No training data, end!'
+            print ('No training data, end!')
             break
 
         # train accelerator with the current data(X0, Y0)
@@ -180,7 +180,7 @@ def train_iteration(A, C, X0, Y0, X1, Y1, iteration, error_bound, choose_type, e
         # generate the truly classification
         cls_t = [accept(Y_origin[i], acc[i]) for i in xrange(len(X_origin))]
 
-        print len([1 for i in cls_t if i])
+        print (len([1 for i in cls_t if i]))
 
         # train the Classifer with X_origin, cls_t
         Y_cls = np.array([1 if v else 0 for v in cls_t]).reshape((len(cls_t), 1))
@@ -190,7 +190,7 @@ def train_iteration(A, C, X0, Y0, X1, Y1, iteration, error_bound, choose_type, e
 
         # get the classifer result of origin data
         cls_c = [1 if v[1] > v[0] else 0 for v in C.predict(X_origin)]
-        print len([1 for i in cls_c if i])
+        print (len([1 for i in cls_c if i]))
 
         # generate the next X_now, Y_now
 
@@ -204,7 +204,7 @@ def train_iteration(A, C, X0, Y0, X1, Y1, iteration, error_bound, choose_type, e
         # save this iteration results
         item = {'iteration':index}
         item.update(evaluate(A, C))
-        print item
+        print (item)
         if len(results) == 0:
             keys = item.keys()
             f_results.write(','.join(keys) + '\n')
@@ -259,7 +259,7 @@ def main(app_name, iteration, error_bound, choose_type, epochA, epochC, batch_si
 
     get_name = get_output_name(app_name, error_bound, choose_type, epochA, epochC, batch_sizeA, batch_sizeC, net_A, net_C)
 
-    print get_name(iteration)
+    print (get_name(iteration))
     
     train_iteration(A, C, X0, Y0, X1, Y1, iteration, error_bound, choose_type, epochA, epochC, batch_sizeA, batch_sizeC, net_A, net_C, get_name)
 
@@ -267,13 +267,13 @@ if __name__ == "__main__":
     if len(sys.argv) == 11:
         net_A = [int(x) for x in sys.argv[9].split('_')[1:]]
         net_C = [int(x) for x in sys.argv[10].split('_')[1:]]
-        print net_A
-        print net_C
+        print (net_A)
+        print (net_C)
         main(sys.argv[1], int(sys.argv[2]), float(sys.argv[3]), int(sys.argv[4]), int(sys.argv[5]), int(sys.argv[6]), int(sys.argv[7]), int(sys.argv[8]), net_A, net_C)
     else:
-        print 'Usage: python train_origin.py [benchmark_name] [iteration] [error_bound] [choose_type] [epochA] [epochC] [batch_sizeA] [batch_sizeC] [net_A] [net_C]'
-        print '#choose_type: 0|1|2|3|4, [0: A or C] | [1: onlyC] | [2: onlyA] | [3: A and C] | [4: true]'
-        print '#net_A|net_C: like a_6_8_8_1, c_6_8_2'
+        print ('Usage: python train_origin.py [benchmark_name] [iteration] [error_bound] [choose_type] [epochA] [epochC] [batch_sizeA] [batch_sizeC] [net_A] [net_C]')
+        print ('#choose_type: 0|1|2|3|4, [0: A or C] | [1: onlyC] | [2: onlyA] | [3: A and C] | [4: true]')
+        print ('#net_A|net_C: like a_6_8_8_1, c_6_8_2')
         exit(0)
 
 
