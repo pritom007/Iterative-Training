@@ -1,4 +1,4 @@
-from keras.models import Sequential,model_from_json
+from keras.models import Sequential, model_from_json
 from keras.layers import Dense, Dropout, Activation
 from keras.optimizers import SGD, RMSprop
 from keras.utils import np_utils, generic_utils
@@ -111,14 +111,14 @@ def gen_evaluate(X, Y, accept):
         acc = A.predict(X)
         # classification by C and truly 
         cls_c = [1 if v[1] > v[0] else 0 for v in C.predict(X)]
-        cls_t = [accept(Y[i], acc[i]) for i in xrange(N)] # to bool
+        cls_t = [accept(Y[i], acc[i]) for i in range(N)] # to bool
         # relatvie error for all test data
-        re = [error.relative_error(Y[i], acc[i]) for i in xrange(N)]
-        re_c = [error.relative_error(Y[i], acc[i]) for i in xrange(N) if cls_c[i]]
+        re = [error.relative_error(Y[i], acc[i]) for i in range(N)]
+        re_c = [error.relative_error(Y[i], acc[i]) for i in range(N) if cls_c[i]]
 
         # accuracy of C, recall of C
-        accuracy_of_C = sum([1.0 if cls_t[i] == cls_c[i] else 0 for i in xrange(N)]) / float(1e-10 + N)
-        recall_of_C = sum([1.0 if cls_t[i] and cls_c[i] else 0 for i in xrange(N)]) / float(1e-10 + sum([1 if v else 0 for v in cls_t]))
+        accuracy_of_C = sum([1.0 if cls_t[i] == cls_c[i] else 0 for i in range(N)]) / float(1e-10 + N)
+        recall_of_C = sum([1.0 if cls_t[i] and cls_c[i] else 0 for i in range(N)]) / float(1e-10 + sum([1 if v else 0 for v in cls_t]))
 
         # invocation of C, invocation truly
         invocation_of_C = float(sum([1 if v else 0 for v in cls_c])) / float(1e-10 + N)
@@ -178,7 +178,7 @@ def train_iteration(A, C, X0, Y0, X1, Y1, iteration, error_bound, choose_type, e
         acc = A.predict(X_origin)
 
         # generate the truly classification
-        cls_t = [accept(Y_origin[i], acc[i]) for i in xrange(len(X_origin))]
+        cls_t = [accept(Y_origin[i], acc[i]) for i in range(len(X_origin))]
 
         print (len([1 for i in cls_t if i]))
 
@@ -194,8 +194,8 @@ def train_iteration(A, C, X0, Y0, X1, Y1, iteration, error_bound, choose_type, e
 
         # generate the next X_now, Y_now
 
-        X_now = np.array([X_origin[i] for i in xrange(len(X_origin)) if choose(cls_t[i], cls_c[i])])
-        Y_now = np.array([Y_origin[i] for i in xrange(len(X_origin)) if choose(cls_t[i], cls_c[i])])
+        X_now = np.array([X_origin[i] for i in range(len(X_origin)) if choose(cls_t[i], cls_c[i])])
+        Y_now = np.array([Y_origin[i] for i in range(len(X_origin)) if choose(cls_t[i], cls_c[i])])
 
         # save weights
         A.save_weights('../weights/iteration/A_{}.weights'.format(get_name(index)), overwrite=True)
