@@ -28,7 +28,7 @@ def main(directory):
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print 'usage: python gen_data.py [directory]'
+        print ('usage: python gen_data.py [directory]')
     else:
         main(str(sys.argv[1]))
 
