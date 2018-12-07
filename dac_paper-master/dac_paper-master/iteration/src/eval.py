@@ -66,7 +66,8 @@ def main(benchmark, weights_file):
 
 
 
-
+#Example: blackscholes ../weights/iteration/A_blackscholes_it4_eb0.1_ct2_epA20_epC20_bsA128_bsC128_netA6_8_8_1_netC6_8_2.weights
+#Also need to change acceleratormodel in main to match the structure of the network
 if __name__ == "__main__":
     if len(sys.argv) != 3:
         print ('usage: python eval.py [benchmark name] [weights file]')
