@@ -186,7 +186,7 @@ def train_iteration(A, C, X0, Y0, X1, Y1, iteration, error_bound, choose_type, e
         Y_cls = np.array([1 if v else 0 for v in cls_t]).reshape((len(cls_t), 1))
         Y_cls = np_utils.to_categorical(Y_cls, 2)
 
-        C.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+        C.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
         C.fit(X_origin, Y_cls, verbose=1)
 
         # get the classifer result of origin data
@@ -249,7 +249,6 @@ def train_iteration(A, C, X0, Y0, X1, Y1, iteration, error_bound, choose_type, e
 '''
 
 
-
 #[benchmark_name] [iteration] [error_bound] [choose_type] [epochA] [epochC] [batch_sizeA] [batch_sizeC] [net_A] [net_C]
 def main(app_name, iteration, error_bound, choose_type, epochA, epochC, batch_sizeA, batch_sizeC, net_A, net_C):
     X0, Y0, X1, Y1 = load_data(app_name)
@@ -264,6 +263,7 @@ def main(app_name, iteration, error_bound, choose_type, epochA, epochC, batch_si
     
     train_iteration(A, C, X0, Y0, X1, Y1, iteration, error_bound, choose_type, epochA, epochC, batch_sizeA, batch_sizeC, net_A, net_C, get_name)
 
+# Example: blackscholes 5 0.1 2 20 20 128 128 a_6_8_8_1 c_6_8_2
 if __name__ == "__main__":
     if len(sys.argv) == 11:
         net_A = [int(x) for x in sys.argv[9].split('_')[1:]]
