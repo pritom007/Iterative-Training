@@ -185,8 +185,9 @@ def train_iteration(A, C, X0, Y0, X1, Y1, iteration, error_bound, choose_type, e
         # train the Classifer with X_origin, cls_t
         Y_cls = np.array([1 if v else 0 for v in cls_t]).reshape((len(cls_t), 1))
         Y_cls = np_utils.to_categorical(Y_cls, 2)
-        
-        C.fit(X_origin, Y_cls, nb_epoch=epochC, batch_size=batch_sizeC, show_accuracy=True, verbose=2)
+
+        C.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+        C.fit(X_origin, Y_cls, verbose=1)
 
         # get the classifer result of origin data
         cls_c = [1 if v[1] > v[0] else 0 for v in C.predict(X_origin)]
