@@ -45,7 +45,7 @@ def load_data(app_name):
 
 def main(benchmark, weights_file):
     X0, Y0, X1, Y1 = load_data(benchmark)
-    A = AcceleratorModel([6, 8, 8, 1]) #Change this to the model by the network
+    A = AcceleratorModel([1, 4, 4, 2])
     A.load_weights(weights_file)
 
     Y2 = A.predict(X1)
