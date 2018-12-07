@@ -128,7 +128,8 @@ def train_origin(A, X0, Y0, X1, Y1, epoch, batch_size, output_name):
 
     print (result_mre)
     print (result_re_list)
-
+    output_name = output_name.replace('->','_')
+    print('{}.csv'.format(output_name))
     f_results = open('../results/origin/{}.csv'.format(output_name), 'w')
     f_results.write('mre,{}\n'.format(result_mre))
     f_results.write('re_bound,re_percent\n')
@@ -288,6 +289,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 5:
         net_list = []
         for i in sys.argv[4:]:
+            print(i)
             net_list.append(int(i))
         main(sys.argv[1], int(sys.argv[2]), int(sys.argv[3]), net_list)
     else:
