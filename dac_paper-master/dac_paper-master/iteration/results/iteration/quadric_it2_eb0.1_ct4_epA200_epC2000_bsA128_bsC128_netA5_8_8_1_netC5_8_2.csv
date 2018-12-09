@@ -1,0 +1,3 @@
+iteration,accuracy_of_C,recall_of_C,invocation_of_C,invocation_truly,mean_relative_error_of_A,mean_relative_error_of_A_with_C
+0,0.9781129545835396,0.0,0.0,0.02188704541645711,0.9099112027408308,0.0
+1,0.9776101893748921,0.0,0.0,0.02238981062510467,0.9105135922464069,0.0
