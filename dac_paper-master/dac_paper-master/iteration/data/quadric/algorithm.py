@@ -42,12 +42,12 @@ for i in range (100000):
     X, Y = make(1, 4)
     if i < 70000:
         train_x.write(str(X[0][0])+" "+str(X[0][1])+" "+str(X[0][2])+" "+str(X[0][3])+" "+str(X[0][4]))
-        train_y.write(str(y[0][0])+" "+str(y[0][1])+" "+str(y[0][2])+" "+str(y[0][3]))
+        train_y.write(str(Y[0][0])+" "+str(Y[0][1])+" "+str(Y[0][2])+" "+str(Y[0][3]))
         train_x.write("\n")
         train_y.write("\n")
     else:
         test_x.write(str(X[0][0])+" "+str(X[0][1])+" "+str(X[0][2])+" "+str(X[0][3])+" "+str(X[0][4]))
-        test_y.write(str(y[0][0])+" "+str(y[0][1])+" "+str(y[0][2])+" "+str(y[0][3]))
+        test_y.write(str(Y[0][0])+" "+strY[0][1])+" "+str(Y[0][2])+" "+str(Y[0][3]))
         test_x.write("\n")
         test_y.write("\n")
 
