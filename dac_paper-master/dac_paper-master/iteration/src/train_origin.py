@@ -45,7 +45,7 @@ def load_data(app_name):
 
 
 def get_output_name(app_name, epoch, batch_size, net_list):
-    output_name = '{}_ep{}_bs{}_net{}'.format(app_name, epoch, batch_size, '->'.join([str(x) for x in net_list]))
+    output_name = '{}_ep{}_bs{}_net{}'.format(app_name, epoch, batch_size, '_'.join([str(x) for x in net_list]))
     return output_name
 
 

@@ -31,7 +31,7 @@ def AcceleratorModel(net_list):
 
 def ClassiferModel(net_list):
     if len(net_list) < 2:
-        print('ERROR! input net structrue is wrong!')
+        print('ERROR! input net structure is wrong!')
         exit(0)
 
     model = Sequential()
@@ -151,6 +151,7 @@ def get_output_name(app_name, error_bound, choose_type, epochA, epochC, batch_si
 
 #train_iteration(A, C, X0, Y0, X1, Y1, iteration, error_bound, choose_type, epochA, epochC, batch_sizeA, batch_sizeC, net_A, net_C, get_name)
 def train_iteration(A, C, X0, Y0, X1, Y1, iteration, error_bound, choose_type, epochA, epochC, batch_sizeA, batch_sizeC, net_A, net_C, get_name):
+    stat = open("stat.txt", 'a')
     print ('start training')
     accept = gen_accept(error_bound)
     evaluate = gen_evaluate(X1, Y1, accept)
@@ -206,6 +207,8 @@ def train_iteration(A, C, X0, Y0, X1, Y1, iteration, error_bound, choose_type, e
         item = {'iteration':index}
         item.update(evaluate(A, C))
         print (item)
+        stat.write(str(item))
+        stat.write("\n")
         if len(results) == 0:
             keys = item.keys()
             f_results.write(','.join(keys) + '\n')
@@ -214,6 +217,9 @@ def train_iteration(A, C, X0, Y0, X1, Y1, iteration, error_bound, choose_type, e
         f_results.flush()
 
     f_results.close()
+    stat.write("-----")
+    stat.write("\n")
+    stat.close()
 
     return results
 
@@ -265,11 +271,15 @@ def main(app_name, iteration, error_bound, choose_type, epochA, epochC, batch_si
 
 # Example: blackscholes 5 0.1 2 20 20 128 128 a_6_8_8_1 c_6_8_2
 if __name__ == "__main__":
+    stat = open("stat.txt", 'a')
     if len(sys.argv) == 11:
         net_A = [int(x) for x in sys.argv[9].split('_')[1:]]
         net_C = [int(x) for x in sys.argv[10].split('_')[1:]]
         print (net_A)
         print (net_C)
+        stat.write(str(sys.argv[1])+" "+str(int(sys.argv[2]))+" "+str(float(sys.argv[3]))+" "+str(int(sys.argv[4]))+" "+str(int(sys.argv[5]))+" "+str(int(sys.argv[6]))+" "+str(int(sys.argv[7]))+" "+str(int(sys.argv[8]))+" "+str(net_A)+" "+ str(net_C))
+        stat.write("\n")
+        stat.close()
         main(sys.argv[1], int(sys.argv[2]), float(sys.argv[3]), int(sys.argv[4]), int(sys.argv[5]), int(sys.argv[6]), int(sys.argv[7]), int(sys.argv[8]), net_A, net_C)
     else:
         print ('Usage: python train_origin.py [benchmark_name] [iteration] [error_bound] [choose_type] [epochA] [epochC] [batch_sizeA] [batch_sizeC] [net_A] [net_C]')
